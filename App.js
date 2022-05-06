@@ -33,17 +33,20 @@ export default function App(props) {
     BackHandler.addEventListener("hardwareBackPress", backHandler);
 
     return () => BackHandler.removeEventListener("hardwareBackPress", backHandler);
-  }, [backButtonEnabled])
+  }, [backButtonEnabled]);
 
   useEffect(() => {
     const netInfroSubscribe = NetInfo.addEventListener((state) => {
-      setConnected(state.isConnected)
+      setConnected(state.isConnected);
       if (!state.isConnected) {
         alert("No connection");
       }
     });
 
-    return netInfroSubscribe;
+
+
+    return () => NetInfo.removeEventListener((state));
+
   },[]);
   
   return (
@@ -58,7 +61,7 @@ export default function App(props) {
           height: ANDROID_BAR_HEIGHT,
           backgroundColor: BACKGROUND_COLOR,
         }}
-      ></View>
+      />
       {(loading || !isConnected) && (
         <View
           style={{
@@ -74,7 +77,7 @@ export default function App(props) {
             justifyContent: "center",
           }}
         >
-          <Image source={require("./assets/icon.png")}></Image>
+          <Image source={require("./assets/icon.png")}/>
         </View>
       )}
       {isConnected && (
